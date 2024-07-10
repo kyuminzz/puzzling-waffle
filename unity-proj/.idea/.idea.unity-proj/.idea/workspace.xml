@@ -22,8 +22,9 @@
     </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/Assets/ScrollViewController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/MainMenu.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/ScrollViewController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/TagScrollViewController.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
@@ -81,7 +82,7 @@
       <updated>1720108921709</updated>
       <workItem from="1720108932361" duration="4908000" />
       <workItem from="1720368471121" duration="51000" />
-      <workItem from="1720368765652" duration="5570000" />
+      <workItem from="1720368765652" duration="6891000" />
     </task>
     <servers />
   </component>
