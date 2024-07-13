@@ -15,9 +15,8 @@ public class ScrollViewController : MonoBehaviour
     
     //private const string IMAGE_PATH = "Assets/images/potrait/";
     private const string IMAGE_PATH = "images/potrait/";
-    private const string IMAGE_PREFIX = "puzzle_";
-    private const string IMAGE_SUFFIX = "_potrait";
-    private const int IMAGE_COUNT = 20;
+    private const string IMAGE_PREFIX = "puzzle_potrait_";
+    private const int IMAGE_COUNT = 30;
 
     void Start()
     {
