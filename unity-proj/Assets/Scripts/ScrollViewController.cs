@@ -24,46 +24,70 @@ public class ScrollViewController : MonoBehaviour
         LoadImages();
     }
 
+    private void Shuffle(List<int> list)
+    {
+        for (int i = 0; i < list.Count; i++)
+        {
+            int temp = list[i];
+            int randomIndex = Random.Range(i, list.Count);
+            list[i] = list[randomIndex];
+            list[randomIndex] = temp;
+        }
+    }
+    
     void LoadImages()
     {
         Debug.Log("Starting to load images");
     
         float y = 0f;
         float maxRowHeight = 0f;
-    
+        
+        // 1부터 IMAGE_COUNT까지의 숫자를 리스트에 담기
+        List<int> imageIndices = new List<int>();
         for (int i = 1; i <= IMAGE_COUNT; i++)
         {
-            string imagePath = $"{IMAGE_PATH}{IMAGE_PREFIX}{i:D3}{IMAGE_SUFFIX}";
-            Sprite sprite = Resources.Load<Sprite>(imagePath);
-            if (sprite != null)
-            {
-                RectTransform newUi = AddNewUIObject(sprite);
-            
-                float x = (i % 2 == 1)
-                    ? -newUi.rect.width / 2 - horizontalSpace / 2
-                    : newUi.rect.width / 2 + horizontalSpace / 2;
-            
-                newUi.anchoredPosition = new Vector2(x, -y - newUi.rect.height / 2);
-            
-                maxRowHeight = Mathf.Max(maxRowHeight, newUi.rect.height);
+            imageIndices.Add(i);
+        }
 
-                if (i % 2 == 0 || i == IMAGE_COUNT)
-                {
-                    y += maxRowHeight + space;
-                    maxRowHeight = 0f;
-                }
-            }
-            else
+        // 리스트를 랜덤하게 셔플하기
+        Shuffle(imageIndices);
+
+        for (int i = 0; i < IMAGE_COUNT; i++)
+        //foreach (int index in imageIndices)
+        {
+            int index = imageIndices[i];
+            int seq = i + 1;
+            //string imagePath = $"{IMAGE_PATH}{IMAGE_PREFIX}{i:D3}{IMAGE_SUFFIX}";
+            string imagePath = $"{IMAGE_PATH}{IMAGE_PREFIX}{index:D4}";
+            Sprite sprite = Resources.Load<Sprite>(imagePath);
+            if (sprite == null)
             {
                 Debug.Log($"Sprite is null. path : {imagePath}");
+                continue;
+            }
+
+            RectTransform newUi = AddNewUIObject(sprite);
+
+            float x = (seq % 2 == 1)
+                ? -newUi.rect.width / 2 - horizontalSpace / 2
+                : newUi.rect.width / 2 + horizontalSpace / 2;
+
+            newUi.anchoredPosition = new Vector2(x, -y - newUi.rect.height / 2);
+
+            maxRowHeight = Mathf.Max(maxRowHeight, newUi.rect.height);
+
+            //if (seq % 2 == 0 || seq == IMAGE_COUNT)
+            if (seq % 2 == 0)
+            {
+                y += maxRowHeight + space;
+                maxRowHeight = 0f;
             }
         }
 
         // 모든 UI 객체를 포함할 수 있도록 콘텐츠 크기 설정
         scrollRect.content.sizeDelta = new Vector2(scrollRect.content.sizeDelta.x, y);
     }
-
-
+    
     Sprite LoadSprite(string path)
     {
         if (File.Exists(path))
