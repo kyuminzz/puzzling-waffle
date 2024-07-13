@@ -70,3 +70,4 @@ unity-proj/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
 # Temporary auto-generated Android Assets
 unity-proj/[Aa]ssets/[Ss]treamingAssets/aa.meta
 unity-proj/[Aa]ssets/[Ss]treamingAssets/aa/*
+unity-proj/.idea/.idea.unity-proj/.idea/workspace.xml

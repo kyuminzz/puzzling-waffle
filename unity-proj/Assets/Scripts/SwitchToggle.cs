@@ -2,37 +2,57 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+
 public class SwitchToggle : MonoBehaviour
 {
     [SerializeField] private RectTransform uiHandleRectTransform;
+    [SerializeField] private RectTransform uiBackgroundRectTransform;
     [SerializeField] private Color backgroundActiveColor;
     [SerializeField] private Color handleActiveColor;
+    [SerializeField] private TMP_Text onText;
     Image backgroundDefaultImage, handleDefaultImage;
     Color backgroundDefaultColor, handleDefaultColor;
     private Toggle toggle;
 
     private Vector2 handlePosition;
-    
+
     void Awake()
     {
         toggle = GetComponent<Toggle>();
-        handlePosition = uiHandleRectTransform.anchoredPosition;
-        backgroundDefaultImage = uiHandleRectTransform.parent.GetComponent<Image>();
-        handleDefaultImage = uiHandleRectTransform.GetComponent<Image>();
+        
+        if (uiHandleRectTransform != null)
+        {
+            handlePosition = uiHandleRectTransform.anchoredPosition;
+            handleDefaultImage = uiHandleRectTransform.GetComponent<Image>();
+        }
+        
+        backgroundDefaultImage = uiBackgroundRectTransform.GetComponent<Image>();
         
         backgroundDefaultColor = backgroundDefaultImage.color;
-        handleDefaultColor = handleDefaultImage.color;
         
+        if (handleDefaultImage != null)
+            handleDefaultColor = handleDefaultImage.color;
+
         toggle.onValueChanged.AddListener(OnSwitch);
     }
 
-    void OnSwitch(bool isOn)
+    public void SetOnText(string text)
     {
-        uiHandleRectTransform.anchoredPosition = isOn ? handlePosition * -1 : handlePosition;
-        backgroundDefaultImage.color = isOn ? backgroundActiveColor : backgroundDefaultColor;
-        handleDefaultImage.color = isOn ? handleActiveColor : handleDefaultColor;
+        onText.text = text;
     }
     
+    void OnSwitch(bool isOn)
+    {
+        backgroundDefaultImage.color = isOn ? backgroundActiveColor : backgroundDefaultColor;
+
+        if(uiHandleRectTransform != null)
+            uiHandleRectTransform.anchoredPosition = isOn ? handlePosition * -1 : handlePosition;
+        
+        if (handleDefaultImage != null)
+            handleDefaultImage.color = isOn ? handleActiveColor : handleDefaultColor;
+    }
+
     void OnDestory()
     {
         toggle.onValueChanged.RemoveListener(OnSwitch);

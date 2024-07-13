@@ -20,16 +20,19 @@ public class TagScrollViewController : MonoBehaviour
     void LoadTags()
     {
         Debug.Log("Starting to load tags");
-        
-        AddNewUIObject();
-        AddNewUIObject();
-        AddNewUIObject();
+
+        var tagNames = new List<string>(){"ANIME", "GIRL", "FANTASY", "CUTE", "LOVE", "DARK", "MANGA", "ART", "SKETCH", "COMIC"};
+        foreach (var tagName in tagNames)
+        {
+            AddNewUIObject(tagName);
+        }
     }
 
-    public RectTransform AddNewUIObject()
+    public RectTransform AddNewUIObject(string tagName)
     {
         var newUi = Instantiate(uiPrefab, scrollRect.content).GetComponent<RectTransform>();
-        
+        var swithToggle = newUi.GetComponent<SwitchToggle>();
+        swithToggle.SetOnText(tagName);
         float x = 0f;
         if (uiObjects.Count > 0)
         {
