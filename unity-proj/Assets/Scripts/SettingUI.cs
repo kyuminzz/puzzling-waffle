@@ -58,7 +58,7 @@ public class SettingUI : MonoBehaviour
     public IEnumerator CloseAfterDelay()
     {
         animator.SetTrigger("Close");
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.1f);
         gameObject.SetActive(false);
         animator.ResetTrigger("Close");
     }
