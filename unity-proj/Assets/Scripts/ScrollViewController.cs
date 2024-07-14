@@ -13,10 +13,6 @@ public class ScrollViewController : MonoBehaviour
     public float horizontalSpace = 20f;
     public List<RectTransform> uiObjects = new List<RectTransform>();
     
-    //private const string IMAGE_PATH = "Assets/images/potrait/";
-    private const string IMAGE_PATH = "images/potrait/";
-    private const string IMAGE_PREFIX = "puzzle_potrait_";
-    private const int IMAGE_COUNT = 30;
 
     void Start()
     {
@@ -42,31 +38,31 @@ public class ScrollViewController : MonoBehaviour
         float y = 0f;
         float maxRowHeight = 0f;
         
-        // 1부터 IMAGE_COUNT까지의 숫자를 리스트에 담기
         List<int> imageIndices = new List<int>();
-        for (int i = 1; i <= IMAGE_COUNT; i++)
+        for (int i = 1; i <= SpriteLoader.IMAGE_COUNT; i++)
         {
             imageIndices.Add(i);
         }
 
-        // 리스트를 랜덤하게 셔플하기
         Shuffle(imageIndices);
 
-        for (int i = 0; i < IMAGE_COUNT; i++)
-        //foreach (int index in imageIndices)
+        for (int i = 0; i < SpriteLoader.IMAGE_COUNT; i++)
         {
             int index = imageIndices[i];
             int seq = i + 1;
-            //string imagePath = $"{IMAGE_PATH}{IMAGE_PREFIX}{i:D3}{IMAGE_SUFFIX}";
-            string imagePath = $"{IMAGE_PATH}{IMAGE_PREFIX}{index:D4}";
-            Sprite sprite = Resources.Load<Sprite>(imagePath);
+            Sprite sprite = SpriteLoader.Instance.GetSpriteByIndex(index);
+
             if (sprite == null)
-            {
-                Debug.Log($"Sprite is null. path : {imagePath}");
                 continue;
-            }
 
             RectTransform newUi = AddNewUIObject(sprite);
+            PotraitCard potraitCard = newUi.GetComponent<PotraitCard>();
+            Button btnCard = potraitCard.GetComponent<Button>();
+            btnCard.onClick.AddListener(() => {
+                Debug.Log($"Clicked on card {potraitCard.index}");
+                SceneLoader.Instance.LoadInGameSceneWithPuzzleIndex(potraitCard.index);
+            });
+            potraitCard.index = index; 
 
             float x = (seq % 2 == 1)
                 ? -newUi.rect.width / 2 - horizontalSpace / 2
