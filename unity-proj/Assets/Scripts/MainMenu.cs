@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
@@ -19,5 +20,12 @@ public class MainMenu : MonoBehaviour
     public void onClickTheme1()
     {
         Debug.Log("onClick");
+    }
+    
+    public void onPotraitButtonClick(PotraitCard potraitCard)
+    {
+        //SceneLoader.LoadInGameSceneWithPuzzleIndex(potraitCard.index);
+        
+        Debug.Log($"onPotraitButtonClick()->index:{potraitCard.index}");
     }
 }
