@@ -79,4 +79,9 @@ public class PuzzleManager : MonoBehaviour
             spriteRenderer.sprite = newSprite;
         }
     }
+
+    public void Show(bool isShow)
+    {
+        transform.localScale = isShow ? Vector3.one : Vector3.zero;
+    }
 }
