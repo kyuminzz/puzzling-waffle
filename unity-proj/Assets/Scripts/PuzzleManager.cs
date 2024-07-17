@@ -23,6 +23,7 @@ public class PuzzleManager : MonoBehaviour
     }
     // 스프라이트 렌더러 리스트를 저장할 변수
     private List<SpriteRenderer> puzzlePieceSpriteRenderers;
+    private List<PuzzlePiece> puzzlePieces;
 
     void Awake()
     {
@@ -39,6 +40,7 @@ public class PuzzleManager : MonoBehaviour
 
         // 리스트 초기화
         puzzlePieceSpriteRenderers = new List<SpriteRenderer>();
+        puzzlePieces = new List<PuzzlePiece>();
 
         // 현재 게임 오브젝트의 모든 자식들을 확인
         foreach (Transform child in transform)
@@ -46,6 +48,12 @@ public class PuzzleManager : MonoBehaviour
             // 자식의 태그가 "puzzle piece"인지 확인
             if (child.CompareTag("PuzzlePiece"))
             {
+                var puzzlePiece = child.GetComponent<PuzzlePiece>();
+                if (puzzlePiece != null)
+                {
+                    puzzlePieces.Add(puzzlePiece);
+                }
+                
                 // 해당 자식의 자식을 가져옴 (각 자식 오브젝트에는 하나의 자식이 있다고 가정)
                 foreach (Transform grandChild in child)
                 {
@@ -69,6 +77,8 @@ public class PuzzleManager : MonoBehaviour
         {
             ChangePuzzlePieceSprites(newSprite);
         }
+
+        MoveRancomPuzzlePiece();
     }
 
     // 스프라이트를 변경하는 메서드
@@ -77,6 +87,14 @@ public class PuzzleManager : MonoBehaviour
         foreach (var spriteRenderer in puzzlePieceSpriteRenderers)
         {
             spriteRenderer.sprite = newSprite;
+        }
+    }
+    
+    private void MoveRancomPuzzlePiece()
+    {
+        foreach (var puzzlePiece in puzzlePieces)
+        {
+            puzzlePiece.MoveToRandomPosition();
         }
     }
 

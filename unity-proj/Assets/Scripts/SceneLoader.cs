@@ -55,12 +55,11 @@ public class SceneLoader : MonoBehaviour
 
         if (scene.name == "InGameScene")
         {
-            PuzzleManager.Instance.LoadPuzzle(puzzleIndex);
             PuzzleManager.Instance.Show(true);
+            PuzzleManager.Instance.LoadPuzzle(puzzleIndex);
         }
         else
         {
-            
             PuzzleManager.Instance.Show(false);
         }
         

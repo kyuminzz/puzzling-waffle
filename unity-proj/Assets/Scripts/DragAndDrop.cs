@@ -27,8 +27,6 @@ public class DragAndDrop : MonoBehaviour
                     SelectedObject = hit.transform.gameObject;
                     SelectedObject.GetComponent<PuzzlePiece>().Selected = true;
                 }
-
-
             }
         }
 

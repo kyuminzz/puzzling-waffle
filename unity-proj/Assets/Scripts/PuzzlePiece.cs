@@ -12,22 +12,32 @@ public class PuzzlePiece : MonoBehaviour
     private Vector3 RightPosition;
     public bool Selected { get; set; }
     public bool InRightPosition { get; set; }
-    // Start is called before the first frame update
+
     void Start()
     {
-        RightPosition = transform.position;
-        transform.position = new Vector3(Random.Range(LEFT_BOUNDARY, RIGHT_BOUNDARY),
-            Random.Range(UP_BOUNDARY, DOWN_BOUNDARY), 0f);
+        //MoveToRandomPosition();
+    }
+    public void MoveToRandomPosition()
+    {
+		RightPosition = transform.localPosition;
+
+        transform.localPosition = new Vector3(Random.Range(LEFT_BOUNDARY, RIGHT_BOUNDARY), Random.Range(UP_BOUNDARY, DOWN_BOUNDARY), 0f);
+
+        InRightPosition = false;
+    }
+    public void MoveToRightPosition()
+    {
+        transform.localPosition = RightPosition;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Vector3.Distance(transform.position, RightPosition) < 0.5f)
+        if(Vector3.Distance(transform.localPosition, RightPosition) < 0.5f)
         {
             if (!Selected)
             {
-                transform.position = RightPosition;
+			    transform.localPosition = RightPosition;
                 InRightPosition = true;
             }
         }
