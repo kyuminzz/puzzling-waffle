@@ -2,11 +2,123 @@
   "stages": [
     {
       "index": 1,
-      "tags": ["girl", "sun", "animation"]
+      "tags": ["girl", "real", "forest"]
     },
     {
       "index": 2,
-      "tags": ["boy", "moon", "cartoon"]
+      "tags": ["girl", "comic", "green"]
+    },
+    {
+      "index": 3,
+      "tags": ["girl"]
+    },
+    {
+      "index": 4,
+      "tags": ["girl"]
+    },
+    {
+      "index": 5,
+      "tags": ["girl"]
+    },
+    {
+      "index": 6,
+      "tags": ["girl"]
+    },
+    {
+      "index": 7,
+      "tags": ["girl"]
+    },
+    {
+      "index": 8,
+      "tags": ["girl"]
+    },
+    {
+      "index": 9,
+      "tags": ["girl"]
+    },
+    {
+      "index": 10,
+      "tags": ["yellow"]
+    },
+    {
+      "index": 11,
+      "tags": ["black"]
+    },
+    {
+      "index": 12,
+      "tags": ["girl"]
+    },
+    {
+      "index": 13,
+      "tags": ["girl"]
+    },
+    {
+      "index": 14,
+      "tags": ["girl", "real"]
+    },
+    {
+      "index": 15,
+      "tags": ["nature"]
+    },
+    {
+      "index": 16,
+      "tags": ["girl", "real"]
+    },
+    {
+      "index": 17,
+      "tags": ["nature", "real"]
+    },
+    {
+      "index": 18,
+      "tags": ["nature", "real"]
+    },
+    {
+      "index": 19,
+      "tags": ["nature", "real"]
+    },
+    {
+      "index": 20,
+      "tags": ["nature", "real"]
+    },
+    {
+      "index": 21,
+      "tags": ["nature", "real"]
+    },
+    {
+      "index": 22,
+      "tags": ["nature", "real"]
+    },
+    {
+      "index": 23,
+      "tags": ["nature", "real"]
+    },
+    {
+      "index": 24,
+      "tags": ["nature", "real"]
+    },
+    {
+      "index": 25,
+      "tags": ["nature", "real"]
+    },
+    {
+      "index": 26,
+      "tags": ["girl", "real"]
+    },
+    {
+      "index": 27,
+      "tags": ["girl", "real"]
+    },
+    {
+      "index": 28,
+      "tags": ["girl", "real"]
+    },
+    {
+      "index": 29,
+      "tags": ["girl", "real"]
+    },
+    {
+      "index": 30,
+      "tags": ["girl", "real"]
     }
   ]
 }
