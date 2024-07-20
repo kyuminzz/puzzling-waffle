@@ -13,9 +13,10 @@ public class SwitchToggle : MonoBehaviour
     [SerializeField] private TMP_Text onText;
     Image backgroundDefaultImage, handleDefaultImage;
     Color backgroundDefaultColor, handleDefaultColor;
-    private Toggle toggle;
+    public Toggle toggle;
 
     private Vector2 handlePosition;
+    public string PuzzleTag { get; set; }
 
     void Awake()
     {

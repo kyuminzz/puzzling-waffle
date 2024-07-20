@@ -6,6 +6,7 @@ using System.IO;
 
 public class TagScrollViewController : MonoBehaviour
 {
+    private List<SwitchToggle> toggles = new List<SwitchToggle>();
     private ScrollRect scrollRect;
     public GameObject uiPrefab;
     public float horizontalSpace = 20f; // 수평 간격을 의미하도록 변수명 변경
@@ -21,10 +22,23 @@ public class TagScrollViewController : MonoBehaviour
     {
         Debug.Log("Starting to load tags");
 
-        var tagNames = new List<string>(){"ANIME", "GIRL", "FANTASY", "CUTE", "LOVE", "DARK", "MANGA", "ART", "SKETCH", "COMIC"};
-        foreach (var tagName in tagNames)
+        StageDataManager.Instance.AllTags.ForEach(tag =>
         {
-            AddNewUIObject(tagName);
+            AddNewUIObject(tag);
+        });
+    }
+    
+    void OnToggleChanged(SwitchToggle toggle, bool isActive)
+    {
+        var tag = toggle.PuzzleTag;
+        
+        if (isActive)
+        {
+            StageDataManager.Instance.AddActiveTag(tag);
+        }
+        else
+        {
+            StageDataManager.Instance.RemoveActiveTag(tag);
         }
     }
 
@@ -32,7 +46,11 @@ public class TagScrollViewController : MonoBehaviour
     {
         var newUi = Instantiate(uiPrefab, scrollRect.content).GetComponent<RectTransform>();
         var swithToggle = newUi.GetComponent<SwitchToggle>();
+        
+        swithToggle.PuzzleTag = tagName;
         swithToggle.SetOnText(tagName);
+        swithToggle.toggle.onValueChanged.AddListener((isActive) =>OnToggleChanged(swithToggle, isActive));
+        toggles.Add(swithToggle);
         float x = 0f;
         if (uiObjects.Count > 0)
         {

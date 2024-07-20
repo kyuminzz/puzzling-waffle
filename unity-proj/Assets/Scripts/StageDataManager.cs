@@ -19,8 +19,30 @@ public class StageList
 
 public class StageDataManager : MonoBehaviour
 {
+    private static StageDataManager _instance;
+    public static StageDataManager Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType<StageDataManager>();
+                if (_instance == null)
+                {
+                    GameObject go = new GameObject("StageDataManager");
+                    _instance = go.AddComponent<StageDataManager>();
+                }
+            }
+            return _instance;
+        }
+    }
+
+    
     private string stagesFileName = "stages";
     private StageList _stageList;
+    private List<string> activeTags = new List<string>();
+    
+    
 
     public StageList stageList
     {
@@ -33,6 +55,30 @@ public class StageDataManager : MonoBehaviour
 
             return _stageList;
         }
+    }
+    List<string> tagNames = new List<string>(){"ANIME", "GIRL", "FANTASY", "CUTE", "LOVE", "DARK", "MANGA", "ART", "SKETCH", "COMIC"};
+
+    public List<string> AllTags => tagNames;
+
+    public void AddActiveTag(string tag)
+    {
+        if (!activeTags.Contains(tag))
+        {
+            activeTags.Add(tag);
+            Debug.Log($"{tag} 활성화됨");
+        }
+    }
+    public void RemoveActiveTag(string tag)
+    {
+        if (activeTags.Contains(tag))
+        {
+            activeTags.Remove(tag);
+            Debug.Log($"{tag} 비활성화됨");
+        }
+    }
+    public List<string> GetActiveTags()
+    {
+        return activeTags;
     }
 
     void Start()

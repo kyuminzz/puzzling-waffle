@@ -677,7 +677,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &508216985
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6831,7 +6831,6 @@ GameObject:
   - component: {fileID: 1566408635}
   - component: {fileID: 1566408634}
   - component: {fileID: 1566408638}
-  - component: {fileID: 1566408639}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -6942,18 +6941,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9bb3401883d9245f58794be31da88a3e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1566408639
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1566408633}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 571426d7f5def4f9790759ea05a343cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!224 &1587086382 stripped
@@ -7499,6 +7486,10 @@ PrefabInstance:
     - target: {fileID: 7258435830158107557, guid: ac939508cbbd246f4b4cd6821dc3e521, type: 3}
       propertyPath: m_Name
       value: Card Scroll View
+      objectReference: {fileID: 0}
+    - target: {fileID: 7258435830158107557, guid: ac939508cbbd246f4b4cd6821dc3e521, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7914873723445216965, guid: ac939508cbbd246f4b4cd6821dc3e521, type: 3}
       propertyPath: m_Pivot.x
