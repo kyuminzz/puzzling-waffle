@@ -1,21 +1,21 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class SpriteLoader : MonoBehaviour
+public class SpriteManager : MonoBehaviour
 {
     public const int IMAGE_COUNT = 30;
-    private static SpriteLoader _instance;
-    public static SpriteLoader Instance
+    private static SpriteManager _instance;
+    public static SpriteManager Instance
     {
         get
         {
             if (_instance == null)
             {
-                _instance = FindObjectOfType<SpriteLoader>();
+                _instance = FindObjectOfType<SpriteManager>();
                 if (_instance == null)
                 {
                     GameObject go = new GameObject("SpriteLoader");
-                    _instance = go.AddComponent<SpriteLoader>();
+                    _instance = go.AddComponent<SpriteManager>();
                 }
             }
             return _instance;

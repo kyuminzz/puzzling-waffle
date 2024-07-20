@@ -71,7 +71,7 @@ public class PuzzleManager : MonoBehaviour
     
     public void LoadPuzzle(int puzzleIndex)
     {
-        Sprite newSprite = SpriteLoader.Instance.GetSpriteByIndex(puzzleIndex);
+        Sprite newSprite = SpriteManager.Instance.GetSpriteByIndex(puzzleIndex);
         
         if (newSprite != null)
         {

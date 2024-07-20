@@ -28,7 +28,7 @@ public class InGameUI : MonoBehaviour
     {
         Debug.Log("ChangeSprites()->");
         // PuzzleManager의 ChangePuzzlePieceSprites 메서드를 호출하여 스프라이트를 변경
-        Sprite newSprite = SpriteLoader.Instance.GetRandomSprite();
+        Sprite newSprite = SpriteManager.Instance.GetRandomSprite();
         
         puzzleManager.ChangePuzzlePieceSprites(newSprite);
     }

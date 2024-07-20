@@ -6,13 +6,38 @@ using System.IO;
 
 public class ScrollViewController : MonoBehaviour
 {
+    private static ScrollViewController _instance;
+    public static ScrollViewController Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType<ScrollViewController>();
+                if (_instance == null)
+                {
+                    Debug.LogError("ScrollViewController is not found in the scene. Creating a new instance.");
+                    GameObject go = new GameObject("ScrollViewController");
+                    _instance = go.AddComponent<ScrollViewController>();
+                }
+            }
+            return _instance;
+        }
+    }
+    
+    
     private ScrollRect scrollRect;
 
     public GameObject uiPrefab;
+    public GameObject moreButtonPrefab;
+    private RectTransform moreButtonRect;
     public float space = 50f;
     public float horizontalSpace = 20f;
     public List<RectTransform> uiObjects = new List<RectTransform>();
-    
+    private const int IMAGES_TO_LOAD = 8;
+    float y = 0f;
+    float maxRowHeight = 0f;
+    private List<int> imageIndices;
 
     void Start()
     {
@@ -31,26 +56,21 @@ public class ScrollViewController : MonoBehaviour
         }
     }
     
-    void LoadImages()
+    void LoadMoreImages()
     {
-        Debug.Log("Starting to load images");
+        Debug.Log("LoadMoreImages");
+        y -= moreButtonRect.rect.height - space;
+        LoadImagesFromIndices(IMAGES_TO_LOAD);
+        AddMoreButton();
+    }
     
-        float y = 0f;
-        float maxRowHeight = 0f;
-        
-        List<int> imageIndices = new List<int>();
-        for (int i = 1; i <= SpriteLoader.IMAGE_COUNT; i++)
-        {
-            imageIndices.Add(i);
-        }
-
-        Shuffle(imageIndices);
-
-        for (int i = 0; i < SpriteLoader.IMAGE_COUNT; i++)
+    void LoadImagesFromIndices(int count)
+    {
+        for (int i = 0; i < count; i++)
         {
             int index = imageIndices[i];
             int seq = i + 1;
-            Sprite sprite = SpriteLoader.Instance.GetSpriteByIndex(index);
+            Sprite sprite = SpriteManager.Instance.GetSpriteByIndex(index);
 
             if (sprite == null)
                 continue;
@@ -62,7 +82,7 @@ public class ScrollViewController : MonoBehaviour
                 Debug.Log($"Clicked on card {potraitCard.index}");
                 SceneLoader.Instance.LoadInGameSceneWithPuzzleIndex(potraitCard.index);
             });
-            potraitCard.index = index; 
+            potraitCard.index = index;
 
             float x = (seq % 2 == 1)
                 ? -newUi.rect.width / 2 - horizontalSpace / 2
@@ -72,31 +92,52 @@ public class ScrollViewController : MonoBehaviour
 
             maxRowHeight = Mathf.Max(maxRowHeight, newUi.rect.height);
 
-            //if (seq % 2 == 0 || seq == IMAGE_COUNT)
-            if (seq % 2 == 0)
+            if (seq % 2 == 0 && i != count - 1)
             {
                 y += maxRowHeight + space;
+                Debug.Log($"Loading y : {y}, portrait height{newUi.rect.height}");
                 maxRowHeight = 0f;
             }
+
+            uiObjects.Add(newUi);
         }
 
-        // 모든 UI 객체를 포함할 수 있도록 콘텐츠 크기 설정
+        y += maxRowHeight;
+    }
+    void AddMoreButton()
+    {
+        if (moreButtonRect == null)
+        {
+            moreButtonRect = Instantiate(moreButtonPrefab, scrollRect.content).GetComponent<RectTransform>();
+            Button button = moreButtonRect.GetComponent<Button>();
+            button.onClick.AddListener(LoadMoreImages);
+            uiObjects.Add(moreButtonRect);
+        }
+
+        moreButtonRect.anchoredPosition = new Vector2(0, -y - moreButtonRect.rect.height / 2);
+        
+        y += moreButtonRect.rect.height;
+
         scrollRect.content.sizeDelta = new Vector2(scrollRect.content.sizeDelta.x, y);
     }
     
-    Sprite LoadSprite(string path)
-    {
-        if (File.Exists(path))
-        {
-            byte[] fileData = File.ReadAllBytes(path);
-            Texture2D texture = new Texture2D(2, 2);
-            texture.LoadImage(fileData);
-            return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.one * 0.5f);
-        }
-        Debug.LogWarning($"Image not found at path: {path}");
-        return null;
-    }
 
+    void LoadImages()
+    {
+        Debug.Log("Starting to load images");
+
+        imageIndices = new List<int>();
+        for (int i = 1; i <= SpriteManager.IMAGE_COUNT; i++)
+        {
+            imageIndices.Add(i);
+        }
+
+        Shuffle(imageIndices);
+
+        LoadImagesFromIndices(IMAGES_TO_LOAD);
+        AddMoreButton();
+    }
+    
     public RectTransform AddNewUIObject(Sprite sprite)
     {
         var newUi = Instantiate(uiPrefab, scrollRect.content).GetComponent<RectTransform>();
@@ -106,16 +147,7 @@ public class ScrollViewController : MonoBehaviour
             image.sprite = sprite;
         }
         uiObjects.Add(newUi);
-
-        // float y = 0f;
-        // for (int i = 0; i < uiObjects.Count; i++)
-        // {
-        //     uiObjects[i].anchoredPosition = new Vector2(0f, -y);
-        //     y += uiObjects[i].sizeDelta.y + space;
-        // }
-
-        //scrollRect.content.sizeDelta = new Vector2(scrollRect.content.sizeDelta.x, y);
-
+        
         return newUi;
     }
 }
