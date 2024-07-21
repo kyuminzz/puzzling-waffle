@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 
@@ -39,42 +40,42 @@ public class StageDataManager : MonoBehaviour
     }
     
     private string stagesFileName = "stages";
-    private StageList _stageList;
+    private StageList _allStageList;
     private List<string> activeTags = new List<string>();
     private Queue<Stage> activeStagesQueue = new Queue<Stage>();
+    //List<string> tagNames = new List<string>(){"ANIME", "GIRL", "FANTASY", "CUTE", "LOVE", "DARK", "MANGA", "ART", "SKETCH", "COMIC"};
+    List<string> tagNames = new List<string>();
+    private StageList allStageList => _allStageList;
+    public List<string> AllTags => tagNames;
+    
+    public void Initialize()
+    {
+        _allStageList = LoadStagesFromResources();
+            
+        SetAllTags();
+    }
 
     public bool IsActiveTag(string tag)
     {
         return activeTags.Contains(tag);
     }
 
-    public StageList stageList
+    private void SetAllTags()
     {
-        get
+        foreach (var stage in _allStageList.stages)
         {
-            if (_stageList != null) return _stageList;
-            
-            _stageList = LoadStagesFromResources();
-            
-            foreach (var stage in _stageList.stages)
+            foreach (var tag in stage.tags)
             {
-                foreach (var tag in stage.tags)
+                if (!tagNames.Contains(tag))
                 {
-                    if (!tagNames.Contains(tag))
-                    {
-                        tagNames.Add(tag);
-                    }
+                    tagNames.Add(tag);
                 }
             }
-
-            return _stageList;
         }
     }
-    //List<string> tagNames = new List<string>(){"ANIME", "GIRL", "FANTASY", "CUTE", "LOVE", "DARK", "MANGA", "ART", "SKETCH", "COMIC"};
-    List<string> tagNames = new List<string>();
-
-    public List<string> AllTags => tagNames;
     
+    
+
     // 활성화된 태그를 기반으로 active stage를 갱신
     public void UpdateActiveStages()
     {
@@ -104,6 +105,8 @@ public class StageDataManager : MonoBehaviour
     
     public void AddActiveTag(string tag)
     {
+        //todo: tag 정보가 갱신 될 때 사용자 태그 정보를 로컬에 저장해뒀다가
+        //todo: 다음에 앱을 실행할 때 불러와서 사용자가 선택한 태그를 불러오도록 수정
         if (!activeTags.Contains(tag))
         {
             activeTags.Add(tag);
@@ -127,24 +130,16 @@ public class StageDataManager : MonoBehaviour
         return activeTags;
     }
 
-    void Start()
-    {
-        // if (_stageList == null)
-        // {
-        //     _stageList = LoadStagesFromResources();
-        // }
-        // foreach (var stage in stageList.stages)
-        // {
-        //     Debug.Log($"Stage {stage.index}: {string.Join(", ", stage.tags)}");
-        // }
-    }
 
     // Resources 폴더에서 JSON 파일을 로드
     private StageList LoadStagesFromResources()
     {
+        Debug.Log("LoadStagesFromResources(1)->");
+        
         TextAsset jsonFile = Resources.Load<TextAsset>(stagesFileName);
         if (jsonFile != null)
         {
+            Debug.Log("LoadStagesFromResources(2)->");
             return JsonConvert.DeserializeObject<StageList>(jsonFile.text);
         }
         else
@@ -155,23 +150,21 @@ public class StageDataManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 태그를 이용하여 스테이지를 로드
     /// 스테이지의 태그가 하나라도 포함된 스테이지 리스트를 반환
     /// </summary>
     /// <param name="tags"></param>
     /// <returns></returns>
-    //public StageList LoadStagesFromTag(string[] tags)
     public StageList LoadStagesFromTag(List<string> tags)
     {
         StageList filteredStages = new StageList { stages = new List<Stage>() };
         
         if (tags.Count == 0)
         {
-            filteredStages.stages.AddRange(stageList.stages);
+            filteredStages.stages.AddRange(allStageList.stages);
             return filteredStages;
         }
         
-        foreach (var stage in stageList.stages)
+        foreach (var stage in allStageList.stages)
         {
             foreach (var tag in tags)
             {

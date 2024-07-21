@@ -36,6 +36,9 @@ public class InGameUI : MonoBehaviour
     public void OnBackButton()
     {
         Debug.Log("OnBackButton()->");
+        
+        PuzzleManager.Instance.Show(false);
+        
         SceneLoader.Instance.LoadMainMenuScene();
     }
 }

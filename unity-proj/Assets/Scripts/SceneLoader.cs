@@ -53,14 +53,22 @@ public class SceneLoader : MonoBehaviour
     {
         Debug.Log($"Scene loaded: {scene.name}, puzzleIndex:{puzzleIndex}");
 
+        switch (scene.name)
+        {
+            case "TitleScene":
+                break;
+            case "MainUIScene":
+                break;
+            case "InGameScene":
+                PuzzleManager.Instance.Show(true);
+                PuzzleManager.Instance.LoadPuzzle(puzzleIndex);
+                break;
+        }
         if (scene.name == "InGameScene")
         {
-            PuzzleManager.Instance.Show(true);
-            PuzzleManager.Instance.LoadPuzzle(puzzleIndex);
         }
-        else
+        
         {
-            PuzzleManager.Instance.Show(false);
         }
         
     }
