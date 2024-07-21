@@ -36,13 +36,11 @@ public class StageDataManager : MonoBehaviour
             return _instance;
         }
     }
-
     
     private string stagesFileName = "stages";
     private StageList _stageList;
     private List<string> activeTags = new List<string>();
-    
-    
+    private Queue<Stage> activeStagesQueue = new Queue<Stage>();
 
     public StageList stageList
     {
@@ -59,7 +57,34 @@ public class StageDataManager : MonoBehaviour
     List<string> tagNames = new List<string>(){"ANIME", "GIRL", "FANTASY", "CUTE", "LOVE", "DARK", "MANGA", "ART", "SKETCH", "COMIC"};
 
     public List<string> AllTags => tagNames;
+    
+    // 활성화된 태그를 기반으로 active stage를 갱신
+    public void UpdateActiveStages()
+    {
+        activeStagesQueue.Clear();
+        StageList filteredStages = LoadStagesFromTag(activeTags);
+        
+        List<Stage> shuffledStages = new List<Stage>(filteredStages.stages);
+        Shuffle(shuffledStages);
 
+        foreach (var stage in shuffledStages)
+        {
+            activeStagesQueue.Enqueue(stage);
+        }
+    }
+
+    private void Shuffle(List<Stage> stages)
+    {
+        for (int i = 0; i < stages.Count; i++)
+        {
+            Stage temp = stages[i];
+            int randomIndex = Random.Range(0, stages.Count);
+            stages[i] = stages[randomIndex];
+            stages[randomIndex] = temp;
+        }
+    }
+    
+    
     public void AddActiveTag(string tag)
     {
         if (!activeTags.Contains(tag))
@@ -67,6 +92,8 @@ public class StageDataManager : MonoBehaviour
             activeTags.Add(tag);
             Debug.Log($"{tag} 활성화됨");
         }
+
+        UpdateActiveStages();
     }
     public void RemoveActiveTag(string tag)
     {
@@ -75,6 +102,8 @@ public class StageDataManager : MonoBehaviour
             activeTags.Remove(tag);
             Debug.Log($"{tag} 비활성화됨");
         }
+
+        UpdateActiveStages();
     }
     public List<string> GetActiveTags()
     {
@@ -114,15 +143,22 @@ public class StageDataManager : MonoBehaviour
     /// </summary>
     /// <param name="tags"></param>
     /// <returns></returns>
-    public StageList LoadStagesFromTag(string[] tags)
+    //public StageList LoadStagesFromTag(string[] tags)
+    public StageList LoadStagesFromTag(List<string> tags)
     {
         StageList filteredStages = new StageList { stages = new List<Stage>() };
-
+        
+        if (tags.Count == 0)
+        {
+            filteredStages.stages.AddRange(stageList.stages);
+            return filteredStages;
+        }
+        
         foreach (var stage in stageList.stages)
         {
             foreach (var tag in tags)
             {
-                if (stage.tags.Contains(tag))
+                if (stage.tags.Exists((t) => t.ToLower() == tag.ToLower()))
                 {
                     filteredStages.stages.Add(stage);
                     break; // 태그 하나라도 포함되면 추가하고 다음 스테이지로 넘어감
@@ -131,5 +167,16 @@ public class StageDataManager : MonoBehaviour
         }
 
         return filteredStages;
+    }
+    
+    // active stage에서 정해진 수량만큼 꺼내서 리스트 형태로 반환
+    public List<Stage> GetActiveStages(int count)
+    {
+        List<Stage> stages = new List<Stage>();
+        for (int i = 0; i < count && activeStagesQueue.Count > 0; i++)
+        {
+            stages.Add(activeStagesQueue.Dequeue());
+        }
+        return stages;
     }
 }

@@ -40,6 +40,7 @@ public class TagScrollViewController : MonoBehaviour
         {
             StageDataManager.Instance.RemoveActiveTag(tag);
         }
+        ScrollViewController.Instance.RefreshPuzzleList();
     }
 
     public RectTransform AddNewUIObject(string tagName)

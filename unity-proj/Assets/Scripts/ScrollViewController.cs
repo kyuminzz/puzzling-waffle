@@ -37,7 +37,7 @@ public class ScrollViewController : MonoBehaviour
     private const int IMAGES_TO_LOAD = 8;
     float y = 0f;
     float maxRowHeight = 0f;
-    private List<int> imageIndices;
+    //private List<int> imageIndices;
 
     void Start()
     {
@@ -45,37 +45,52 @@ public class ScrollViewController : MonoBehaviour
         LoadImages();
     }
 
-    private void Shuffle(List<int> list)
+    public void RefreshPuzzleList()
     {
-        for (int i = 0; i < list.Count; i++)
+        // 기존 UI 오브젝트 비활성화
+        foreach (var uiObject in uiObjects)
         {
-            int temp = list[i];
-            int randomIndex = Random.Range(i, list.Count);
-            list[i] = list[randomIndex];
-            list[randomIndex] = temp;
+            uiObject.gameObject.SetActive(false);
         }
+        y = 0f;
+        maxRowHeight = 0f;
+
+        // StageDataManager에서 활성화된 태그에 맞는 스테이지를 가져옴
+        LoadImages();
+    }
+    
+    void LoadImages()
+    {
+        Debug.Log("Starting to load images");
+
+        StageDataManager.Instance.UpdateActiveStages();
+        LoadImagesFromStageData(IMAGES_TO_LOAD);
+        AddMoreButton();
     }
     
     void LoadMoreImages()
     {
         Debug.Log("LoadMoreImages");
         y -= moreButtonRect.rect.height - space;
-        LoadImagesFromIndices(IMAGES_TO_LOAD);
+        LoadImagesFromStageData(IMAGES_TO_LOAD);
         AddMoreButton();
     }
     
-    void LoadImagesFromIndices(int count)
+    void LoadImagesFromStageData(int count)
     {
-        for (int i = 0; i < count; i++)
+        //var indexIndex = StageDataManager.Instance.PopStages();
+        var indexIndex = StageDataManager.Instance.GetActiveStages(IMAGES_TO_LOAD);
+
+        for (int i = 0; i < indexIndex.Count; i++)
         {
-            int index = imageIndices[i];
+            int index = indexIndex[i].index;
             int seq = i + 1;
             Sprite sprite = SpriteManager.Instance.GetSpriteByIndex(index);
 
             if (sprite == null)
                 continue;
 
-            RectTransform newUi = AddNewUIObject(sprite);
+            RectTransform newUi = GetOrAddNewUIObject(sprite);
             PotraitCard potraitCard = newUi.GetComponent<PotraitCard>();
             Button btnCard = potraitCard.GetComponent<Button>();
             btnCard.onClick.AddListener(() => {
@@ -99,7 +114,7 @@ public class ScrollViewController : MonoBehaviour
                 maxRowHeight = 0f;
             }
 
-            uiObjects.Add(newUi);
+            newUi.gameObject.SetActive(true);
         }
 
         y += maxRowHeight;
@@ -117,25 +132,8 @@ public class ScrollViewController : MonoBehaviour
         moreButtonRect.anchoredPosition = new Vector2(0, -y - moreButtonRect.rect.height / 2);
         
         y += moreButtonRect.rect.height;
-
+        moreButtonRect.gameObject.SetActive(true);
         scrollRect.content.sizeDelta = new Vector2(scrollRect.content.sizeDelta.x, y);
-    }
-    
-
-    void LoadImages()
-    {
-        Debug.Log("Starting to load images");
-
-        imageIndices = new List<int>();
-        for (int i = 1; i <= SpriteManager.IMAGE_COUNT; i++)
-        {
-            imageIndices.Add(i);
-        }
-
-        Shuffle(imageIndices);
-
-        LoadImagesFromIndices(IMAGES_TO_LOAD);
-        AddMoreButton();
     }
     
     public RectTransform AddNewUIObject(Sprite sprite)
@@ -148,6 +146,24 @@ public class ScrollViewController : MonoBehaviour
         }
         uiObjects.Add(newUi);
         
+        return newUi;
+    }
+    public RectTransform GetOrAddNewUIObject(Sprite sprite)
+    {
+        RectTransform newUi = uiObjects.Find(uiObject => !uiObject.gameObject.activeSelf);
+
+        if (newUi == null)
+        {
+            newUi = Instantiate(uiPrefab, scrollRect.content).GetComponent<RectTransform>();
+            uiObjects.Add(newUi);
+        }
+
+        Image image = newUi.GetComponent<Image>();
+        if (image != null)
+        {
+            image.sprite = sprite;
+        }
+
         return newUi;
     }
 }
