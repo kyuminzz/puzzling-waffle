@@ -39,7 +39,6 @@ public class DragAndDrop : MonoBehaviour
                 return;
             SelectedObject.GetComponent<PuzzlePiece>().Selected = false;
             SelectedObject = null;
-
         }
 
         if (SelectedObject != null)

@@ -98,8 +98,21 @@ public class PuzzleManager : MonoBehaviour
         }
     }
 
+    public void EndGame()
+    {
+        MoveRightPosition();
+        Show(false);
+    }
     public void Show(bool isShow)
     {
         transform.localScale = isShow ? Vector3.one : Vector3.zero;
+    }
+
+    public void MoveRightPosition()
+    {
+        foreach (var puzzlePiece in puzzlePieces)
+        {
+            puzzlePiece.MoveToRightPosition();
+        }
     }
 }
