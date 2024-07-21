@@ -14,10 +14,15 @@ public class TagScrollViewController : MonoBehaviour
     
     void Start()
     {
+        Debug.Log("TagScrollViewController Start()");
         scrollRect = GetComponent<ScrollRect>();
         LoadTags();
     }
 
+    private void OnEnable()
+    {
+        Debug.Log("TagScrollViewController OnEnable()");
+    }
     void LoadTags()
     {
         Debug.Log("Starting to load tags");
@@ -49,6 +54,10 @@ public class TagScrollViewController : MonoBehaviour
         var swithToggle = newUi.GetComponent<SwitchToggle>();
         
         swithToggle.PuzzleTag = tagName;
+        
+        if(StageDataManager.Instance.IsActiveTag(tagName))
+            swithToggle.toggle.isOn = true;
+        
         swithToggle.SetOnText(tagName);
         swithToggle.toggle.onValueChanged.AddListener((isActive) =>OnToggleChanged(swithToggle, isActive));
         toggles.Add(swithToggle);

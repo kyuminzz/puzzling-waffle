@@ -31,6 +31,7 @@ public class StageDataManager : MonoBehaviour
                 {
                     GameObject go = new GameObject("StageDataManager");
                     _instance = go.AddComponent<StageDataManager>();
+                    DontDestroyOnLoad(go);
                 }
             }
             return _instance;
@@ -42,19 +43,35 @@ public class StageDataManager : MonoBehaviour
     private List<string> activeTags = new List<string>();
     private Queue<Stage> activeStagesQueue = new Queue<Stage>();
 
+    public bool IsActiveTag(string tag)
+    {
+        return activeTags.Contains(tag);
+    }
+
     public StageList stageList
     {
         get
         {
-            if (_stageList == null)
+            if (_stageList != null) return _stageList;
+            
+            _stageList = LoadStagesFromResources();
+            
+            foreach (var stage in _stageList.stages)
             {
-                _stageList = LoadStagesFromResources();
+                foreach (var tag in stage.tags)
+                {
+                    if (!tagNames.Contains(tag))
+                    {
+                        tagNames.Add(tag);
+                    }
+                }
             }
 
             return _stageList;
         }
     }
-    List<string> tagNames = new List<string>(){"ANIME", "GIRL", "FANTASY", "CUTE", "LOVE", "DARK", "MANGA", "ART", "SKETCH", "COMIC"};
+    //List<string> tagNames = new List<string>(){"ANIME", "GIRL", "FANTASY", "CUTE", "LOVE", "DARK", "MANGA", "ART", "SKETCH", "COMIC"};
+    List<string> tagNames = new List<string>();
 
     public List<string> AllTags => tagNames;
     
