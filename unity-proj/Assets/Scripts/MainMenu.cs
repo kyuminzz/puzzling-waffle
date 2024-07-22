@@ -20,24 +20,28 @@ public class MainMenu : MonoBehaviour
     [SerializeField]
     GameObject[] pannels;
 
-    public void onClickHome(GameObject targetPannel)
+    public void onClickHome(GameObject targetPanel)
     {
         DeactiveAllPannels();
-        targetPannel.SetActive(true);
+        targetPanel.SetActive(true);
+        ScrollViewController.Instance.ShowAllStages();
         Debug.Log("onClickHome");
     }
 
-    public void onClickMyInfo(GameObject targetPannel)
+    public void onClickMyInfo(GameObject targetPanel)
     {
         DeactiveAllPannels();
         Debug.Log("onClickMyInfo");
-        targetPannel.SetActive(true);
+        targetPanel.SetActive(true);
+        ScrollViewController.Instance.ShowCompletedPuzzles();
+        //ScrollViewController.Instance.ShowInProgressPuzzles();
     }
-    public void onClickSetting(GameObject targetPannel)
+    public void onClickSetting(GameObject targetPanel)
     {
         DeactiveAllPannels();
         Debug.Log("onClickSetting");
-        targetPannel.SetActive(true);
+        targetPanel.SetActive(true);
+        ScrollViewController.Instance.Hide();
     }
 
     private void DeactiveAllPannels()

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -42,12 +43,22 @@ public class ScrollViewController : MonoBehaviour
     void Start()
     {
         scrollRect = GetComponent<ScrollRect>();
-        LoadImages();
+        LoadAllStages();
+    }
+    
+    public void ShowAllStages()
+    {
+        gameObject.SetActive(true);
+        RefreshPuzzleList();
     }
 
-    public void RefreshPuzzleList()
+    public void ShowInProgressPuzzles()
     {
-        // 기존 UI 오브젝트 비활성화
+        gameObject.SetActive(true);
+    }
+    
+    public void ShowCompletedPuzzles()
+    {
         foreach (var uiObject in uiObjects)
         {
             uiObject.gameObject.SetActive(false);
@@ -55,16 +66,36 @@ public class ScrollViewController : MonoBehaviour
         y = 0f;
         maxRowHeight = 0f;
 
-        // StageDataManager에서 활성화된 태그에 맞는 스테이지를 가져옴
-        LoadImages();
+        LoadCompleteImages();
+    }
+
+    public void Hide()
+    {
+        gameObject.SetActive(false);
+    }
+    public void RefreshPuzzleList()
+    {
+        foreach (var uiObject in uiObjects)
+        {
+            uiObject.gameObject.SetActive(false);
+        }
+        y = 0f;
+        maxRowHeight = 0f;
+
+        LoadAllStages();
     }
     
-    void LoadImages()
+    void LoadAllStages()
     {
-        Debug.Log("Starting to load images");
-
         StageDataManager.Instance.UpdateActiveStages();
-        LoadImagesFromStageData(IMAGES_TO_LOAD);
+        LoadImagesFromStageData(IMAGES_TO_LOAD, StageDataManager.Instance.GetActiveStages);
+        AddMoreButton();
+    }
+
+    void LoadCompleteImages()
+    {
+        StageDataManager.Instance.UpdateActiveStages();//todo:임시 로직. 추후에 수정 필요
+        LoadImagesFromStageData(IMAGES_TO_LOAD, StageDataManager.Instance.GetCompleteStages);
         AddMoreButton();
     }
     
@@ -72,14 +103,14 @@ public class ScrollViewController : MonoBehaviour
     {
         Debug.Log("LoadMoreImages");
         y -= moreButtonRect.rect.height - space;
-        LoadImagesFromStageData(IMAGES_TO_LOAD);
+        LoadImagesFromStageData(IMAGES_TO_LOAD, StageDataManager.Instance.GetActiveStages);
         AddMoreButton();
     }
     
-    void LoadImagesFromStageData(int count)
+    void LoadImagesFromStageData(int count, Func<int, List<Stage>> stageAction)
     {
         //var indexIndex = StageDataManager.Instance.PopStages();
-        var indexIndex = StageDataManager.Instance.GetActiveStages(IMAGES_TO_LOAD);
+        var indexIndex = stageAction.Invoke(IMAGES_TO_LOAD);
 
         for (int i = 0; i < indexIndex.Count; i++)
         {

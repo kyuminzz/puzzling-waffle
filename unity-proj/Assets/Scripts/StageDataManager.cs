@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Random = UnityEngine.Random;
 
 
 [System.Serializable]
@@ -43,6 +45,8 @@ public class StageDataManager : MonoBehaviour
     private StageList _allStageList;
     private List<string> activeTags = new List<string>();
     private Queue<Stage> activeStagesQueue = new Queue<Stage>();
+    private Queue<Stage> completeStagesQueue = new Queue<Stage>();
+    private Queue<Stage> inProgressStagesQueue = new Queue<Stage>();
     //List<string> tagNames = new List<string>(){"ANIME", "GIRL", "FANTASY", "CUTE", "LOVE", "DARK", "MANGA", "ART", "SKETCH", "COMIC"};
     List<string> tagNames = new List<string>();
     private StageList allStageList => _allStageList;
@@ -87,6 +91,8 @@ public class StageDataManager : MonoBehaviour
 
         foreach (var stage in shuffledStages)
         {
+            if(stage.index % 2 == 0)
+                completeStagesQueue.Enqueue(stage);
             activeStagesQueue.Enqueue(stage);
         }
     }
@@ -178,15 +184,31 @@ public class StageDataManager : MonoBehaviour
 
         return filteredStages;
     }
-    
-    // active stage에서 정해진 수량만큼 꺼내서 리스트 형태로 반환
-    public List<Stage> GetActiveStages(int count)
+    private List<Stage> GetStages(int count, Func<Queue<Stage>> queueProvider)
     {
         List<Stage> stages = new List<Stage>();
-        for (int i = 0; i < count && activeStagesQueue.Count > 0; i++)
+        Queue<Stage> queue = queueProvider();
+
+        for (int i = 0; i < count && queue.Count > 0; i++)
         {
-            stages.Add(activeStagesQueue.Dequeue());
+            stages.Add(queue.Dequeue());
         }
+
         return stages;
+    }
+
+    public List<Stage> GetActiveStages(int count)
+    {
+        return GetStages(count, () => activeStagesQueue);
+    }
+
+    public List<Stage> GetCompleteStages(int count)
+    {
+        return GetStages(count, () => completeStagesQueue);
+    }
+
+    public List<Stage> GetInProgressStages(int count)
+    {
+        return GetStages(count, () => inProgressStagesQueue);
     }
 }
