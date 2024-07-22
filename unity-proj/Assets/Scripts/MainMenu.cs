@@ -17,9 +17,35 @@ public class MainMenu : MonoBehaviour
         
     }
 
-    public void onClickTheme1()
+    [SerializeField]
+    GameObject[] pannels;
+
+    public void onClickHome(GameObject targetPannel)
     {
-        Debug.Log("onClick");
+        DeactiveAllPannels();
+        targetPannel.SetActive(true);
+        Debug.Log("onClickHome");
+    }
+
+    public void onClickMyInfo(GameObject targetPannel)
+    {
+        DeactiveAllPannels();
+        Debug.Log("onClickMyInfo");
+        targetPannel.SetActive(true);
+    }
+    public void onClickSetting(GameObject targetPannel)
+    {
+        DeactiveAllPannels();
+        Debug.Log("onClickSetting");
+        targetPannel.SetActive(true);
+    }
+
+    private void DeactiveAllPannels()
+    {
+        foreach (var pannel in pannels)
+        {
+            pannel.SetActive(false);
+        }
     }
     
     public void onPotraitButtonClick(PotraitCard potraitCard)
