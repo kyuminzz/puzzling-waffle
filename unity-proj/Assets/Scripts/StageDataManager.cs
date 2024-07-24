@@ -22,6 +22,7 @@ public class StageList
 
 public class StageDataManager : MonoBehaviour
 {
+    private Dictionary<int, Stage> _allStages = new Dictionary<int, Stage>();
     private static StageDataManager _instance;
     public static StageDataManager Instance
     {
@@ -52,9 +53,26 @@ public class StageDataManager : MonoBehaviour
     private StageList allStageList => _allStageList;
     public List<string> AllTags => tagNames;
     
+    private StageProgressData _stageProgressData;
+    
     public void Initialize()
     {
         _allStageList = LoadStagesFromResources();
+
+        foreach (var _stage in _allStageList.stages)
+        {
+            _allStages.Add(_stage.index, _stage);
+        }
+        
+        _stageProgressData = StageProgressStorage.Instance.LoadData();
+        
+        _stageProgressData.ClearedStages.ForEach(clearInfo =>
+        {
+            var stage = _allStages[clearInfo.StageIndex];
+            completeStagesQueue.Enqueue(stage);
+        });
+
+        PuzzleManager.OnClearPuzzle += UpdateClearStage;
             
         SetAllTags();
     }
@@ -78,7 +96,18 @@ public class StageDataManager : MonoBehaviour
         }
     }
     
-    
+    public void UpdateClearStage(int stageIndex, int difficulty, float clearTime)
+    {
+        Debug.Log("UpdateClearStage");
+        
+        Stage stage = _allStages[stageIndex];
+        
+        completeStagesQueue.Enqueue(stage);
+        
+        PuzzleClearInfo clearInfo = new PuzzleClearInfo(stageIndex, difficulty, clearTime);
+        _stageProgressData.ClearedStages.Add(clearInfo);
+        StageProgressStorage.Instance.SaveData(_stageProgressData);
+    }
 
     // 활성화된 태그를 기반으로 active stage를 갱신
     public void UpdateActiveStages()
@@ -91,8 +120,6 @@ public class StageDataManager : MonoBehaviour
 
         foreach (var stage in shuffledStages)
         {
-            if(stage.index % 2 == 0)
-                completeStagesQueue.Enqueue(stage);
             activeStagesQueue.Enqueue(stage);
         }
     }

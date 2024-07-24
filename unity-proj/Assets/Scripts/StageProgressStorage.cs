@@ -1,25 +1,25 @@
 using UnityEngine;
 using Newtonsoft.Json;
 
-public class StageProgressManager : MonoBehaviour
+public class StageProgressStorage : MonoBehaviour
 {
-    private static StageProgressManager _instance;
-    public static StageProgressManager Instance
+    private static StageProgressStorage _instance;
+    public static StageProgressStorage Instance
     {
         get
         {
             if (_instance == null)
             {
-                _instance = FindObjectOfType<StageProgressManager>();
+                _instance = FindObjectOfType<StageProgressStorage>();
                 if (_instance == null)
                 {
-                    GameObject go = new GameObject("StageProgressManager");
-                    _instance = go.AddComponent<StageProgressManager>();
+                    GameObject go = new GameObject("StageProgressStorage");
+                    _instance = go.AddComponent<StageProgressStorage>();
                     DontDestroyOnLoad(go); // 씬 전환 시 파괴되지 않도록 설정
                 }
-                else if (_instance != FindObjectOfType<StageProgressManager>())
+                else if (_instance != FindObjectOfType<StageProgressStorage>())
                 {
-                    Destroy(FindObjectOfType<StageProgressManager>().gameObject); // 중복 방지
+                    Destroy(FindObjectOfType<StageProgressStorage>().gameObject); // 중복 방지
                 }
             }
             return _instance;

@@ -7,7 +7,7 @@ public class EmptyScene : MonoBehaviour
 
     void Start()
     {
-        _stageProgressData = StageProgressManager.Instance.LoadData();
+        _stageProgressData = StageProgressStorage.Instance.LoadData();
     }
     
     public void Test_Stage_2_2()
@@ -50,8 +50,8 @@ public class EmptyScene : MonoBehaviour
 
     public void Test_Remove()
     {
-        StageProgressManager.Instance.ClearData();
-        _stageProgressData = StageProgressManager.Instance.LoadData();
+        StageProgressStorage.Instance.ClearData();
+        _stageProgressData = StageProgressStorage.Instance.LoadData();
     }
 
     void SaveProgress(int stageIndex, int difficulty, List<PuzzlePiecePosition> pieces)
@@ -59,13 +59,13 @@ public class EmptyScene : MonoBehaviour
         PuzzleProgressInfo progressInfo = new PuzzleProgressInfo(stageIndex, difficulty);
         progressInfo.Pieces.AddRange(pieces);
         _stageProgressData.InProgressStages.Add(progressInfo);
-        StageProgressManager.Instance.SaveData(_stageProgressData);
+        StageProgressStorage.Instance.SaveData(_stageProgressData);
     }
 
     void MarkStageAsCleared(int stageIndex, int difficulty, float clearTime)
     {
         PuzzleClearInfo clearInfo = new PuzzleClearInfo(stageIndex, difficulty, clearTime);
         _stageProgressData.ClearedStages.Add(clearInfo);
-        StageProgressManager.Instance.SaveData(_stageProgressData);
+        StageProgressStorage.Instance.SaveData(_stageProgressData);
     }
 }

@@ -1,9 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class PuzzlePiece : MonoBehaviour
 {
+    public static Action OnRightPosition;
     public bool isDebug = false;
     private const float LEFT_BOUNDARY = -1.25f;
     private const float RIGHT_BOUNDARY = 1.25f;
@@ -35,8 +38,9 @@ public class PuzzlePiece : MonoBehaviour
     public void MoveToRightPosition()
     {
         transform.localPosition = RightPosition;
+        InRightPosition = true;
     }
-
+    
     // Update is called once per frame
     void Update()
     {
@@ -45,12 +49,12 @@ public class PuzzlePiece : MonoBehaviour
             Log($"MoveToRandomPosition()->localPosition:{transform.localPosition}, RightPosition:{RightPosition}, Distance:{Vector3.Distance(transform.localPosition, RightPosition)}");
         }
         
-        if(Vector3.Distance(transform.localPosition, RightPosition) < 0.5f)
+        if(InRightPosition == false && Vector3.Distance(transform.localPosition, RightPosition) < 0.5f)
         {
             if (!Selected)
             {
-			    transform.localPosition = RightPosition;
-                InRightPosition = true;
+                MoveToRightPosition();
+                OnRightPosition?.Invoke();
             }
         }
     }

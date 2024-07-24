@@ -1,8 +1,10 @@
+using System;
 using UnityEngine;
 using System.Collections.Generic;
 
 public class PuzzleManager : MonoBehaviour
 {
+    private int _currentPuzzleIndex;
     private static PuzzleManager _instance;
     public static PuzzleManager Instance
     {
@@ -24,9 +26,11 @@ public class PuzzleManager : MonoBehaviour
     // 스프라이트 렌더러 리스트를 저장할 변수
     private List<SpriteRenderer> puzzlePieceSpriteRenderers;
     private List<PuzzlePiece> puzzlePieces;
-
+    public static Action<int, int, float> OnClearPuzzle;
+    
     void Awake()
     {
+        PuzzlePiece.OnRightPosition += OnRightPosition;
         // 싱글톤 인스턴스 설정
         if (_instance == null)
         {
@@ -68,17 +72,41 @@ public class PuzzleManager : MonoBehaviour
             }
         }
     }
-    
+
+    private bool IsCleared()
+    {
+        foreach (var puzzlePiece in puzzlePieces)
+        {
+            if (!puzzlePiece.InRightPosition)
+            {
+                return false;
+            }
+        }
+
+        return true;
+
+    }
+    private void OnRightPosition()
+    {
+        bool isCleared = IsCleared();
+        if (isCleared)
+        {
+            OnClearPuzzle?.Invoke(_currentPuzzleIndex, 4, 0f);   
+        }
+        Debug.Log($"OnRightPosition(1)->isAllRightPosition : {isCleared}");
+    }
+
     public void LoadPuzzle(int puzzleIndex)
     {
-        Sprite newSprite = SpriteManager.Instance.GetSpriteByIndex(puzzleIndex);
+        _currentPuzzleIndex = puzzleIndex;
+        Sprite newSprite = SpriteManager.Instance.GetSpriteByIndex(_currentPuzzleIndex);
         
         if (newSprite != null)
         {
             ChangePuzzlePieceSprites(newSprite);
         }
 
-        MoveRancomPuzzlePiece();
+        MoveRandomPuzzlePiece();
     }
 
     // 스프라이트를 변경하는 메서드
@@ -90,7 +118,7 @@ public class PuzzleManager : MonoBehaviour
         }
     }
     
-    private void MoveRancomPuzzlePiece()
+    private void MoveRandomPuzzlePiece()
     {
         foreach (var puzzlePiece in puzzlePieces)
         {

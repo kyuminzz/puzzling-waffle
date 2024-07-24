@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,6 +8,26 @@ public class InGameUI : MonoBehaviour
     
     [SerializeField]
     private Button changeSpriteButton; // 스프라이트 변경 버튼
+
+    [SerializeField]
+    private GameObject clearPopup; // 클리어 팝업
+
+    private void Awake()
+    {
+        PuzzleManager.OnClearPuzzle += OnClearPuzzle;
+    }
+
+    private void OnDestroy()
+    {
+        PuzzleManager.OnClearPuzzle -= OnClearPuzzle;
+    }
+
+    private void OnClearPuzzle(int stageIndex, int difficulty, float clearTime)
+    {
+        Debug.Log("OnClearPuzzle()->");
+        
+        clearPopup.SetActive(true);
+    }
 
     void Start()
     {
@@ -21,7 +42,6 @@ public class InGameUI : MonoBehaviour
             
             Debug.Log("Change Sprite Button is assigned!");
         }
-        
     }
 
     void ChangeSprites()
@@ -41,4 +61,14 @@ public class InGameUI : MonoBehaviour
         
         SceneLoader.Instance.LoadMainMenuScene();
     }
+
+    public void OnClearButton()
+    {
+        Debug.Log("OnClearButton()->");
+        
+        PuzzleManager.Instance.EndGame();
+        
+        SceneLoader.Instance.LoadMainMenuScene();
+    }
+
 }
