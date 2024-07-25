@@ -27,6 +27,15 @@ public class ScrollViewController : MonoBehaviour
     }
     
     
+    enum EScrollViewState
+    {
+        None,
+        AllStages,
+        InProgress,
+        Completed
+    }
+    private EScrollViewState scrollViewState = EScrollViewState.None;
+    
     private ScrollRect scrollRect;
 
     public GameObject uiPrefab;
@@ -48,6 +57,7 @@ public class ScrollViewController : MonoBehaviour
     
     public void ShowAllStages()
     {
+        scrollViewState = EScrollViewState.AllStages;
         gameObject.SetActive(true);
         RefreshPuzzleList();
     }
@@ -56,9 +66,10 @@ public class ScrollViewController : MonoBehaviour
     {
         gameObject.SetActive(true);
     }
-    
+
     public void ShowCompletedPuzzles()
     {
+        scrollViewState = EScrollViewState.Completed;
         foreach (var uiObject in uiObjects)
         {
             uiObject.gameObject.SetActive(false);
@@ -103,7 +114,19 @@ public class ScrollViewController : MonoBehaviour
     {
         Debug.Log("LoadMoreImages");
         y -= moreButtonRect.rect.height - space;
-        LoadImagesFromStageData(IMAGES_TO_LOAD, StageDataManager.Instance.GetActiveStages);
+        switch (scrollViewState)
+        {
+            case EScrollViewState.AllStages:
+                LoadImagesFromStageData(IMAGES_TO_LOAD, StageDataManager.Instance.GetActiveStages);
+                break;
+            case EScrollViewState.Completed:
+                LoadImagesFromStageData(IMAGES_TO_LOAD, StageDataManager.Instance.GetCompleteStages);
+                break;
+            default:
+                Debug.LogError($"Invalid state : {scrollViewState}");
+                break;
+        }
+        
         AddMoreButton();
     }
     
