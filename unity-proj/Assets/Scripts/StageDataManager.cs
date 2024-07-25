@@ -65,12 +65,6 @@ public class StageDataManager : MonoBehaviour
         }
         
         _stageProgressData = StageProgressStorage.Instance.LoadData();
-        
-        _stageProgressData.ClearedStages.ForEach(clearInfo =>
-        {
-            var stage = _allStages[clearInfo.StageIndex];
-            completeStagesQueue.Enqueue(stage);
-        });
 
         PuzzleManager.OnClearPuzzle += UpdateClearStage;
             
@@ -122,6 +116,16 @@ public class StageDataManager : MonoBehaviour
         {
             activeStagesQueue.Enqueue(stage);
         }
+    }
+
+    public void UpdateCompleteStages()
+    {
+        _stageProgressData.ClearedStages.ForEach(clearInfo =>
+        {
+            var stage = _allStages[clearInfo.StageIndex];
+            if(completeStagesQueue.Contains(stage) == false)
+                completeStagesQueue.Enqueue(stage);
+        });
     }
 
     private void Shuffle(List<Stage> stages)

@@ -57,28 +57,32 @@ public class ScrollViewController : MonoBehaviour
     
     public void ShowAllStages()
     {
+        Debug.Log("ShowAllStages");
+        
         scrollViewState = EScrollViewState.AllStages;
+        
         gameObject.SetActive(true);
+        
         RefreshPuzzleList();
+        
+        LoadAllStages();
     }
 
+    public void ShowCompletedPuzzles()
+    {
+        Debug.Log("ShowCompletedPuzzles");
+
+        scrollViewState = EScrollViewState.Completed;
+        
+        RefreshPuzzleList();
+        
+        LoadCompleteImages();
+    }
     public void ShowInProgressPuzzles()
     {
         gameObject.SetActive(true);
     }
 
-    public void ShowCompletedPuzzles()
-    {
-        scrollViewState = EScrollViewState.Completed;
-        foreach (var uiObject in uiObjects)
-        {
-            uiObject.gameObject.SetActive(false);
-        }
-        y = 0f;
-        maxRowHeight = 0f;
-
-        LoadCompleteImages();
-    }
 
     public void Hide()
     {
@@ -92,11 +96,9 @@ public class ScrollViewController : MonoBehaviour
         }
         y = 0f;
         maxRowHeight = 0f;
-
-        LoadAllStages();
     }
     
-    void LoadAllStages()
+    public void LoadAllStages()
     {
         StageDataManager.Instance.UpdateActiveStages();
         LoadImagesFromStageData(IMAGES_TO_LOAD, StageDataManager.Instance.GetActiveStages);
@@ -105,7 +107,7 @@ public class ScrollViewController : MonoBehaviour
 
     void LoadCompleteImages()
     {
-        StageDataManager.Instance.UpdateActiveStages();//todo:임시 로직. 추후에 수정 필요
+        StageDataManager.Instance.UpdateCompleteStages();//todo:임시 로직. 추후에 수정 필요
         LoadImagesFromStageData(IMAGES_TO_LOAD, StageDataManager.Instance.GetCompleteStages);
         AddMoreButton();
     }

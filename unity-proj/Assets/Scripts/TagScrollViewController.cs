@@ -44,6 +44,8 @@ public class TagScrollViewController : MonoBehaviour
             StageDataManager.Instance.RemoveActiveTag(tag);
         }
         ScrollViewController.Instance.RefreshPuzzleList();
+
+        ScrollViewController.Instance.LoadAllStages();
     }
 
     public RectTransform AddNewUIObject(string tagName)
