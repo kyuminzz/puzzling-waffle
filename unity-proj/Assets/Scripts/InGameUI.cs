@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,11 +16,18 @@ public class InGameUI : MonoBehaviour
     private void Awake()
     {
         PuzzleManager.OnClearPuzzle += OnClearPuzzle;
+        PuzzleManager.OnPuzzlePiecePlaced += OnPuzzlePiecePlaced;
     }
-
+    
     private void OnDestroy()
     {
         PuzzleManager.OnClearPuzzle -= OnClearPuzzle;
+        PuzzleManager.OnPuzzlePiecePlaced -= OnPuzzlePiecePlaced;
+    }
+    
+    private void OnPuzzlePiecePlaced(int stageIndex, int difficulty, List<PuzzlePiecePosition> pieces)
+    {
+        
     }
 
     private void OnClearPuzzle(int stageIndex, int difficulty, float clearTime)
@@ -47,10 +55,10 @@ public class InGameUI : MonoBehaviour
     void ChangeSprites()
     {
         Debug.Log("ChangeSprites()->");
-        // PuzzleManager의 ChangePuzzlePieceSprites 메서드를 호출하여 스프라이트를 변경
-        Sprite newSprite = SpriteManager.Instance.GetRandomSprite();
-        
-        puzzleManager.ChangePuzzlePieceSprites(newSprite);
+        // // PuzzleManager의 ChangePuzzlePieceSprites 메서드를 호출하여 스프라이트를 변경
+        // Sprite newSprite = SpriteManager.Instance.GetRandomSprite();
+        //
+        // puzzleManager.ChangePuzzlePieceSprites(newSprite);
     }
 
     public void OnBackButton()

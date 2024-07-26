@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class PuzzleProgressInfo
 {
@@ -14,10 +16,11 @@ public class PuzzleProgressInfo
     }
 }
 
+[Serializable]
 public class PuzzlePiecePosition
 {
-    public int X { get; set; }
-    public int Y { get; set; }
+    public int X;
+    public int Y;
 
     public PuzzlePiecePosition(int x, int y)
     {

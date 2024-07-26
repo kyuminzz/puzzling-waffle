@@ -27,6 +27,8 @@ public class PuzzleManager : MonoBehaviour
     private List<SpriteRenderer> puzzlePieceSpriteRenderers;
     private List<PuzzlePiece> puzzlePieces;
     public static Action<int, int, float> OnClearPuzzle;
+    //List<PuzzlePiecePosition> pieces
+    public static Action<int, int, List<PuzzlePiecePosition>> OnPuzzlePiecePlaced;
     
     void Awake()
     {
@@ -72,6 +74,18 @@ public class PuzzleManager : MonoBehaviour
             }
         }
     }
+    
+    private List<PuzzlePiecePosition> getRightPositions()
+    {
+        List<PuzzlePiecePosition> rightPositions = new List<PuzzlePiecePosition>();
+        foreach (var puzzlePiece in puzzlePieces)
+        {
+            if(puzzlePiece.InRightPosition)
+                rightPositions.Add(puzzlePiece.GridPosition);
+        }
+
+        return rightPositions;
+    }
 
     private bool IsCleared()
     {
@@ -89,9 +103,14 @@ public class PuzzleManager : MonoBehaviour
     private void OnRightPosition()
     {
         bool isCleared = IsCleared();
+        var rightPositions = getRightPositions(); 
         if (isCleared)
         {
             OnClearPuzzle?.Invoke(_currentPuzzleIndex, 4, 0f);   
+        }
+        else
+        {
+            OnPuzzlePiecePlaced?.Invoke(_currentPuzzleIndex, 4, rightPositions);
         }
         Debug.Log($"OnRightPosition(1)->isAllRightPosition : {isCleared}");
     }

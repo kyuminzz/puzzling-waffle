@@ -1076,6 +1076,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69468ac7d91724c308bcb816f50b3cd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GridPosition:
+    X: 2
+    Y: 1
   isDebug: 0
 --- !u!1 &519420028
 GameObject:
@@ -1541,6 +1544,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69468ac7d91724c308bcb816f50b3cd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GridPosition:
+    X: 2
+    Y: 2
   isDebug: 0
 --- !u!1 &649575959
 GameObject:
@@ -2318,6 +2324,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69468ac7d91724c308bcb816f50b3cd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GridPosition:
+    X: 1
+    Y: 2
   isDebug: 0
 --- !u!1 &1177826640
 GameObject:
@@ -3669,6 +3678,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69468ac7d91724c308bcb816f50b3cd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GridPosition:
+    X: 1
+    Y: 1
   isDebug: 1
 --- !u!1 &1566408633
 GameObject:

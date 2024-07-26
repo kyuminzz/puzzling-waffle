@@ -58,7 +58,15 @@ public class EmptyScene : MonoBehaviour
     {
         PuzzleProgressInfo progressInfo = new PuzzleProgressInfo(stageIndex, difficulty);
         progressInfo.Pieces.AddRange(pieces);
+
+        if (_stageProgressData.InProgressStages.Exists(p => (p.StageIndex == stageIndex && p.Difficulty == difficulty)))
+        {
+            _stageProgressData.InProgressStages.RemoveAll(p =>
+                (p.StageIndex == stageIndex && p.Difficulty == difficulty));
+        }
+
         _stageProgressData.InProgressStages.Add(progressInfo);
+
         StageProgressStorage.Instance.SaveData(_stageProgressData);
     }
 

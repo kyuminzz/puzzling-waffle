@@ -67,6 +67,7 @@ public class StageDataManager : MonoBehaviour
         _stageProgressData = StageProgressStorage.Instance.LoadData();
 
         PuzzleManager.OnClearPuzzle += UpdateClearStage;
+        PuzzleManager.OnPuzzlePiecePlaced += UpdateInProgressStage;
             
         SetAllTags();
     }
@@ -100,6 +101,30 @@ public class StageDataManager : MonoBehaviour
         
         PuzzleClearInfo clearInfo = new PuzzleClearInfo(stageIndex, difficulty, clearTime);
         _stageProgressData.ClearedStages.Add(clearInfo);
+        StageProgressStorage.Instance.SaveData(_stageProgressData);
+    }
+    
+    public void UpdateInProgressStage(int stageIndex, int difficulty, List<PuzzlePiecePosition> pieces)
+    {
+        Debug.Log("UpdateInProgressStage");
+        
+        Stage stage = _allStages[stageIndex];
+        
+        if(inProgressStagesQueue.Contains(stage) == false)
+            inProgressStagesQueue.Enqueue(stage);
+        
+        PuzzleProgressInfo progressInfo = new PuzzleProgressInfo(stageIndex, difficulty);
+        
+        progressInfo.Pieces.AddRange(pieces);
+        
+        if (_stageProgressData.InProgressStages.Exists(p => (p.StageIndex == stageIndex && p.Difficulty == difficulty)))
+        {
+            _stageProgressData.InProgressStages.RemoveAll(p =>
+                (p.StageIndex == stageIndex && p.Difficulty == difficulty));
+        }
+
+        _stageProgressData.InProgressStages.Add(progressInfo);
+        
         StageProgressStorage.Instance.SaveData(_stageProgressData);
     }
 

@@ -40,6 +40,7 @@ public class StageProgressStorage : MonoBehaviour
     
     void Awake()
     {
+        Debug.Log($"path : {System.IO.Path.Combine(Application.persistentDataPath, "stage_progress_data.json")}");
         if (_instance == null)
         {
             _instance = this;

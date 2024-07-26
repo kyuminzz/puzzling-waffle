@@ -6,6 +6,8 @@ using Random = UnityEngine.Random;
 
 public class PuzzlePiece : MonoBehaviour
 {
+    [SerializeField] public PuzzlePiecePosition GridPosition;
+    
     public static Action OnRightPosition;
     public bool isDebug = false;
     private const float LEFT_BOUNDARY = -1.25f;
