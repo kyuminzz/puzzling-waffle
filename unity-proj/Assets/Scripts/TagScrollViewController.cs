@@ -21,7 +21,6 @@ public class TagScrollViewController : MonoBehaviour
 
     private void OnEnable()
     {
-        Debug.Log("TagScrollViewController OnEnable()");
     }
     void LoadTags()
     {

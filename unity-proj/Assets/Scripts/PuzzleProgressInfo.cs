@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class PuzzleProgressInfo
 {
@@ -26,6 +25,22 @@ public class PuzzlePiecePosition
     {
         X = x;
         Y = y;
+    }
+    
+    public override bool Equals(object obj)
+    {
+        if (obj == null)
+        {
+            return false;
+        }
+
+        PuzzlePiecePosition p = obj as PuzzlePiecePosition;
+        if ((object)p == null)
+        {
+            return false;
+        }
+
+        return (X == p.X) && (Y == p.Y);
     }
 }
 

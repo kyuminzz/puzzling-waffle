@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System.IO;
 
 public class ScrollViewController : MonoBehaviour
 {
@@ -150,7 +148,6 @@ public class ScrollViewController : MonoBehaviour
             PotraitCard potraitCard = newUi.GetComponent<PotraitCard>();
             Button btnCard = potraitCard.GetComponent<Button>();
             btnCard.onClick.AddListener(() => {
-                Debug.Log($"Clicked on card {potraitCard.index}");
                 SceneLoader.Instance.LoadInGameSceneWithPuzzleIndex(potraitCard.index);
             });
             potraitCard.index = index;
@@ -166,7 +163,6 @@ public class ScrollViewController : MonoBehaviour
             if (seq % 2 == 0 && i != count - 1)
             {
                 y += maxRowHeight + space;
-                Debug.Log($"Loading y : {y}, portrait height{newUi.rect.height}");
                 maxRowHeight = 0f;
             }
 

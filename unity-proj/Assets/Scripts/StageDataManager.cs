@@ -54,7 +54,19 @@ public class StageDataManager : MonoBehaviour
     public List<string> AllTags => tagNames;
     
     private StageProgressData _stageProgressData;
-    
+
+    public PuzzleProgressInfo GetStageInfo(int stageIndex, int difficulty)
+    {
+        foreach (var progressStage in _stageProgressData.InProgressStages)
+        {
+            if( progressStage.StageIndex == stageIndex && progressStage.Difficulty == difficulty)
+            {
+                return progressStage;
+            }
+        }
+
+        return null;
+    }
     public void Initialize()
     {
         _allStageList = LoadStagesFromResources();
@@ -172,7 +184,6 @@ public class StageDataManager : MonoBehaviour
         if (!activeTags.Contains(tag))
         {
             activeTags.Add(tag);
-            Debug.Log($"{tag} 활성화됨");
         }
 
         UpdateActiveStages();
@@ -182,7 +193,6 @@ public class StageDataManager : MonoBehaviour
         if (activeTags.Contains(tag))
         {
             activeTags.Remove(tag);
-            Debug.Log($"{tag} 비활성화됨");
         }
 
         UpdateActiveStages();
@@ -196,12 +206,9 @@ public class StageDataManager : MonoBehaviour
     // Resources 폴더에서 JSON 파일을 로드
     private StageList LoadStagesFromResources()
     {
-        Debug.Log("LoadStagesFromResources(1)->");
-        
         TextAsset jsonFile = Resources.Load<TextAsset>(stagesFileName);
         if (jsonFile != null)
         {
-            Debug.Log("LoadStagesFromResources(2)->");
             return JsonConvert.DeserializeObject<StageList>(jsonFile.text);
         }
         else
