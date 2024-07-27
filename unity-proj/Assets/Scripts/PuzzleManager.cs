@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class PuzzleManager : MonoBehaviour
 {
     private int _currentPuzzleIndex;
+    private int _currentPuzzleDifficulty;
     private static PuzzleManager _instance;
     public static PuzzleManager Instance
     {
@@ -32,10 +33,11 @@ public class PuzzleManager : MonoBehaviour
     
     void Awake()
     {
-        PuzzlePiece.OnRightPosition += OnRightPosition;
+        Debug.Log("PuzzleManager Awake() 호출");
         // 싱글톤 인스턴스 설정
         if (_instance == null)
         {
+            PuzzlePiece.OnRightPosition += OnRightPosition;
             _instance = this;
             DontDestroyOnLoad(gameObject); // 씬이 변경되어도 유지
         }
@@ -106,18 +108,18 @@ public class PuzzleManager : MonoBehaviour
         var rightPositions = getRightPositions(); 
         if (isCleared)
         {
-            OnClearPuzzle?.Invoke(_currentPuzzleIndex, 4, 0f);   
+            OnClearPuzzle?.Invoke(_currentPuzzleIndex, _currentPuzzleDifficulty, 0f);   
         }
         else
         {
-            OnPuzzlePiecePlaced?.Invoke(_currentPuzzleIndex, 4, rightPositions);
+            OnPuzzlePiecePlaced?.Invoke(_currentPuzzleIndex, _currentPuzzleDifficulty, rightPositions);
         }
-        Debug.Log($"OnRightPosition(1)->isAllRightPosition : {isCleared}");
     }
 
     public void LoadPuzzle(int puzzleIndex)
     {
         _currentPuzzleIndex = puzzleIndex;
+        _currentPuzzleDifficulty = 4;
         Sprite newSprite = SpriteManager.Instance.GetSpriteByIndex(_currentPuzzleIndex);
         
         if (newSprite != null)
@@ -139,8 +141,12 @@ public class PuzzleManager : MonoBehaviour
     
     private void MoveRandomPuzzlePiece()
     {
+        PuzzleProgressInfo progressInfo = StageDataManager.Instance.GetStageInfo(_currentPuzzleIndex, _currentPuzzleDifficulty);
         foreach (var puzzlePiece in puzzlePieces)
         {
+            if (progressInfo != null && progressInfo.Pieces.Contains(puzzlePiece.GridPosition))
+                continue;
+            
             puzzlePiece.MoveToRandomPosition();
         }
     }
