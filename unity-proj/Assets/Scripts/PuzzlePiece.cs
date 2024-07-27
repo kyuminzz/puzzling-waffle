@@ -7,7 +7,6 @@ using Random = UnityEngine.Random;
 public class PuzzlePiece : MonoBehaviour
 {
     [SerializeField] public PuzzlePiecePosition GridPosition;
-    
     public static Action OnRightPosition;
     public bool isDebug = false;
     private const float LEFT_BOUNDARY = -1.25f;
@@ -15,10 +14,15 @@ public class PuzzlePiece : MonoBehaviour
     private const float UP_BOUNDARY = 0.3f;
     private const float DOWN_BOUNDARY = -4.3f;
     
-    private Vector3 RightPosition;
+    private Vector3 RightPosition = Vector3.one;
     public bool Selected { get; set; }
     public bool InRightPosition { get; set; }
 
+    void Awake()
+    {
+        if(RightPosition == Vector3.one)
+            RightPosition = transform.localPosition;
+    }
     void Start()
     {
         //MoveToRandomPosition();
@@ -30,7 +34,6 @@ public class PuzzlePiece : MonoBehaviour
     }
     public void MoveToRandomPosition()
     {
-		RightPosition = transform.localPosition;
         Log($"MoveToRandomPosition()->RightPosition:{RightPosition}");
 
         transform.localPosition = new Vector3(Random.Range(LEFT_BOUNDARY, RIGHT_BOUNDARY), Random.Range(UP_BOUNDARY, DOWN_BOUNDARY), 0f);
