@@ -1,21 +1,20 @@
+using System;
 using UnityEngine;
 
 public class MainMenu : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     [SerializeField]
     GameObject[] pannels;
+    
+    [SerializeField]
+    GameObject MyInfoPanelObj;
+
+    private void Awake()
+    {
+        Debug.Log("MainMenu Awake() 호출");
+        MyInfoPanel.OnSwitchComplete = onClickCompleted;
+        MyInfoPanel.OnSwitchInprogress = onClickInProgress;
+    }
 
     public void onClickHome(GameObject targetPanel)
     {
@@ -32,18 +31,18 @@ public class MainMenu : MonoBehaviour
         targetPanel.SetActive(true);
         ScrollViewController.Instance.ShowCompletedPuzzles();
     }
-    public void onClickCompleted(GameObject targetPanel)
+    public void onClickCompleted()
     {
         DeactiveAllPannels();
         Debug.Log("onClickCompleted");
-        targetPanel.SetActive(true);
+        MyInfoPanelObj.SetActive(true);
         ScrollViewController.Instance.ShowCompletedPuzzles();
     }
-    public void onClickInProgress(GameObject targetPanel)
+    public void onClickInProgress()
     {
         DeactiveAllPannels();
         Debug.Log("onClickMyInfo");
-        targetPanel.SetActive(true);
+        MyInfoPanelObj.SetActive(true);
         ScrollViewController.Instance.ShowInProgressPuzzles();
     }
     public void onClickSetting(GameObject targetPanel)
