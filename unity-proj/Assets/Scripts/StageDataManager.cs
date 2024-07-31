@@ -151,6 +151,9 @@ public class StageDataManager : MonoBehaviour
 
         foreach (var stage in shuffledStages)
         {
+            if(_stageProgressData.ClearedStages.Exists(c => c.StageIndex == stage.index))
+                continue;
+                
             activeStagesQueue.Enqueue(stage);
         }
     }
@@ -162,6 +165,20 @@ public class StageDataManager : MonoBehaviour
             var stage = _allStages[clearInfo.StageIndex];
             if(completeStagesQueue.Contains(stage) == false)
                 completeStagesQueue.Enqueue(stage);
+        });
+    }
+    
+    public void UpdateInProgressStages()
+    {
+        _stageProgressData.InProgressStages.ForEach(progressInfo =>
+        {
+            var stage = _allStages[progressInfo.StageIndex];
+            var isComplete = _stageProgressData.ClearedStages.Exists(c => c.StageIndex == progressInfo.StageIndex);
+
+            if (inProgressStagesQueue.Contains(stage) == false && isComplete == false)
+            {
+                inProgressStagesQueue.Enqueue(stage);
+            }
         });
     }
 

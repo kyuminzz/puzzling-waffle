@@ -31,7 +31,20 @@ public class MainMenu : MonoBehaviour
         Debug.Log("onClickMyInfo");
         targetPanel.SetActive(true);
         ScrollViewController.Instance.ShowCompletedPuzzles();
-        //ScrollViewController.Instance.ShowInProgressPuzzles();
+    }
+    public void onClickCompleted(GameObject targetPanel)
+    {
+        DeactiveAllPannels();
+        Debug.Log("onClickCompleted");
+        targetPanel.SetActive(true);
+        ScrollViewController.Instance.ShowCompletedPuzzles();
+    }
+    public void onClickInProgress(GameObject targetPanel)
+    {
+        DeactiveAllPannels();
+        Debug.Log("onClickMyInfo");
+        targetPanel.SetActive(true);
+        ScrollViewController.Instance.ShowInProgressPuzzles();
     }
     public void onClickSetting(GameObject targetPanel)
     {

@@ -72,16 +72,26 @@ public class ScrollViewController : MonoBehaviour
 
         scrollViewState = EScrollViewState.Completed;
         
+        gameObject.SetActive(true);
+        
         RefreshPuzzleList();
         
         LoadCompleteImages();
     }
+    
     public void ShowInProgressPuzzles()
     {
+        Debug.Log("ShowInProgressPuzzles");
+        
+        scrollViewState = EScrollViewState.InProgress;
+        
         gameObject.SetActive(true);
+        
+        RefreshPuzzleList();
+        
+        LoadInprogressImages();
     }
-
-
+    
     public void Hide()
     {
         gameObject.SetActive(false);
@@ -105,8 +115,15 @@ public class ScrollViewController : MonoBehaviour
 
     void LoadCompleteImages()
     {
-        StageDataManager.Instance.UpdateCompleteStages();//todo:임시 로직. 추후에 수정 필요
+        StageDataManager.Instance.UpdateCompleteStages();
         LoadImagesFromStageData(IMAGES_TO_LOAD, StageDataManager.Instance.GetCompleteStages);
+        AddMoreButton();
+    }
+    
+    void LoadInprogressImages()
+    {
+        StageDataManager.Instance.UpdateInProgressStages();
+        LoadImagesFromStageData(IMAGES_TO_LOAD, StageDataManager.Instance.GetInProgressStages);
         AddMoreButton();
     }
     
