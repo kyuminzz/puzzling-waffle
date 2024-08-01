@@ -31,6 +31,8 @@ public class PuzzleManager : MonoBehaviour
     //List<PuzzlePiecePosition> pieces
     public static Action<int, int, List<PuzzlePiecePosition>> OnPuzzlePiecePlaced;
     
+    [SerializeField]
+    private Transform puzzlePieceParent4by4;
     void Awake()
     {
         Debug.Log("PuzzleManager Awake() 호출");
@@ -51,7 +53,7 @@ public class PuzzleManager : MonoBehaviour
         puzzlePieces = new List<PuzzlePiece>();
 
         // 현재 게임 오브젝트의 모든 자식들을 확인
-        foreach (Transform child in transform)
+        foreach (Transform child in puzzlePieceParent4by4)
         {
             // 자식의 태그가 "puzzle piece"인지 확인
             if (child.CompareTag("PuzzlePiece"))
@@ -119,7 +121,8 @@ public class PuzzleManager : MonoBehaviour
     public void LoadPuzzle(int puzzleIndex)
     {
         _currentPuzzleIndex = puzzleIndex;
-        _currentPuzzleDifficulty = 4;
+        //_currentPuzzleDifficulty = 4;
+        _currentPuzzleDifficulty = 16;
         Sprite newSprite = SpriteManager.Instance.GetSpriteByIndex(_currentPuzzleIndex);
         
         if (newSprite != null)
